@@ -1,6 +1,8 @@
 package com.turisticka_agencija.dodatne_aktivnosti.controller;
 
 import com.turisticka_agencija.dodatne_aktivnosti.dto.RegistrationRequest;
+import com.turisticka_agencija.dodatne_aktivnosti.model.Arrangement;
+import com.turisticka_agencija.dodatne_aktivnosti.model.Category;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Customer;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Registration;
 import com.turisticka_agencija.dodatne_aktivnosti.service.ICustomerService;
@@ -48,37 +50,19 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{customerId}/registrations")
-    public ResponseEntity<List<Registration>> findAllRegistrations(@PathVariable Long customerId) {
-        return new ResponseEntity<>(customerService.findAllRegistrationsByCustomerId(customerId), HttpStatus.OK);
-    }
-
-    @GetMapping("/{customerId}/registrations/{registrationId}")
-    public ResponseEntity<Registration> findRegistrationById(@PathVariable Long customerId,
-                                                             @PathVariable Long registrationId) {
-        return new ResponseEntity<>(customerService.findRegistrationById(customerId, registrationId), HttpStatus.OK);
-    }
-
     @PostMapping("/{customerId}/registrations")
-    public ResponseEntity<Registration> addRegistration(@PathVariable Long customerId,
-                                                        @RequestBody RegistrationRequest request) {
-        return new ResponseEntity<>(customerService.addRegistration(customerId, request), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{customerId}/registrations/{registrationId}")
-    public ResponseEntity<Registration> updateRegistration(@PathVariable Long customerId,
-                                                           @PathVariable Long registrationId,
-                                                           @RequestBody RegistrationRequest request) {
+    public ResponseEntity<Customer> registerOrUpdateActivity(@PathVariable Long customerId,
+                                                             @RequestBody RegistrationRequest request) {
         return new ResponseEntity<>(
-                customerService.updateRegistration(customerId, registrationId, request),
+                customerService.registerOrUpdateActivity(customerId, request),
                 HttpStatus.OK
         );
     }
 
-    @DeleteMapping("/{customerId}/registrations/{registrationId}")
-    public ResponseEntity<Void> deleteRegistration(@PathVariable Long customerId,
-                                                   @PathVariable Long registrationId) {
-        customerService.deleteRegistration(customerId, registrationId);
+    @DeleteMapping("/{customerId}/registrations/{activityId}")
+    public ResponseEntity<Void> deleteRegistrationForActivity(@PathVariable Long customerId,
+                                                              @PathVariable Long activityId) {
+        customerService.deleteRegistrationForActivity(customerId, activityId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -114,6 +98,30 @@ public class CustomerController {
                                                             @PathVariable Long arrangementId) {
         return new ResponseEntity<>(
                 customerService.removeBookedArrangement(customerId, arrangementId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{customerId}/favorite-categories")
+    public ResponseEntity<List<Category>> findFavoriteCategoriesByCustomerId(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                customerService.findFavoriteCategoriesByCustomerId(customerId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{customerId}/registrations")
+    public ResponseEntity<List<Registration>> findRegistrationsByCustomerId(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                customerService.findRegistrationsByCustomerId(customerId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{customerId}/booked-arrangements")
+    public ResponseEntity<List<Arrangement>> findBookedArrangementsByCustomerId(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                customerService.findBookedArrangementsByCustomerId(customerId),
                 HttpStatus.OK
         );
     }

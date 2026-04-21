@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   neo4j-nais:
     image: neo4j
@@ -11,6 +9,29 @@ services:
       NEO4J_AUTH: neo4j/password
     volumes:
       - nais_data:/data
+    networks:
+      - nais-network
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p password 'RETURN 1' || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+
+  dodatne-aktivnosti-service:
+    build:
+      context: ./dodatne-aktivnosti
+      dockerfile: Dockerfile
+    container_name: dodatne-aktivnosti-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      neo4j-nais:
+        condition: service_healthy
+    environment:
+      SPRING_NEO4J_URI: bolt://neo4j-nais:7687
+      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+      SPRING_NEO4J_AUTHENTICATION_PASSWORD: password
     networks:
       - nais-network
 

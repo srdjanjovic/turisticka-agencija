@@ -98,4 +98,24 @@ public class AdditionalActivityService implements IAdditionalActivityService {
         activity.setArrangement(null);
         return additionalActivityRepository.save(activity);
     }
+
+    @Override
+    public List<AdditionalActivity> recommendActivitiesBySimilarCustomers(Long customerId) {
+        return additionalActivityRepository.recommendActivitiesBySimilarCustomers(customerId);
+    }
+
+    @Override
+    public List<AdditionalActivity> recommendActivitiesByCategory(Long customerId) {
+        return additionalActivityRepository.recommendActivitiesByCategory(customerId);
+    }
+
+    @Override
+    public List<AdditionalActivity> findAffordableActivitiesForCustomer(Long customerId) {
+        return additionalActivityRepository.findAffordableActivitiesForCustomer(customerId);
+    }
+
+    @Override
+    public List<AdditionalActivity> findPopularActivitiesForCustomer(Long customerId) {
+        return additionalActivityRepository.findPopularActivitiesForCustomer(customerId);
+    }
 }

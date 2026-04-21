@@ -1,12 +1,10 @@
 package com.turisticka_agencija.dodatne_aktivnosti.service.impl;
 
 import com.turisticka_agencija.dodatne_aktivnosti.dto.RegistrationRequest;
-import com.turisticka_agencija.dodatne_aktivnosti.model.AdditionalActivity;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Arrangement;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Category;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Customer;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Registration;
-import com.turisticka_agencija.dodatne_aktivnosti.repository.AdditionalActivityRepository;
 import com.turisticka_agencija.dodatne_aktivnosti.repository.ArrangementRepository;
 import com.turisticka_agencija.dodatne_aktivnosti.repository.CategoryRepository;
 import com.turisticka_agencija.dodatne_aktivnosti.repository.CustomerRepository;
@@ -21,17 +19,14 @@ import java.util.List;
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
-    private final AdditionalActivityRepository additionalActivityRepository;
     private final CategoryRepository categoryRepository;
     private final ArrangementRepository arrangementRepository;
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository,
-                           AdditionalActivityRepository additionalActivityRepository,
                            CategoryRepository categoryRepository,
                            ArrangementRepository arrangementRepository) {
         this.customerRepository = customerRepository;
-        this.additionalActivityRepository = additionalActivityRepository;
         this.categoryRepository = categoryRepository;
         this.arrangementRepository = arrangementRepository;
     }
@@ -62,7 +57,6 @@ public class CustomerService implements ICustomerService {
         existingCustomer.setEmail(customer.getEmail());
         existingCustomer.setContact(customer.getContact());
         existingCustomer.setFavoriteCategories(customer.getFavoriteCategories());
-        existingCustomer.setRegistrations(customer.getRegistrations());
         existingCustomer.setBookedArrangements(customer.getBookedArrangements());
 
         return customerRepository.save(existingCustomer);
@@ -74,78 +68,18 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Registration addRegistration(Long customerId, RegistrationRequest request) {
-        Customer customer = findById(customerId);
-
-        AdditionalActivity activity = additionalActivityRepository.findById(request.getActivityId())
-                .orElseThrow(() -> new RuntimeException("Activity not found with id: " + request.getActivityId()));
-
-        Registration registration = new Registration();
-        registration.setActivity(activity);
-        registration.setRegistrationDate(request.getRegistrationDate());
-        registration.setNumberOfPeople(request.getNumberOfPeople());
-
-        customer.getRegistrations().add(registration);
-        Customer savedCustomer = customerRepository.save(customer);
-
-        return savedCustomer.getRegistrations().stream()
-                .filter(r -> r.getActivity() != null
-                        && r.getActivity().getActivityId().equals(activity.getActivityId())
-                        && r.getRegistrationDate().equals(request.getRegistrationDate())
-                        && r.getNumberOfPeople().equals(request.getNumberOfPeople()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Registration was created, but could not be retrieved."));
-    }
-
-    @Override
-    public List<Registration> findAllRegistrationsByCustomerId(Long customerId) {
-        Customer customer = findById(customerId);
-        return new ArrayList<>(customer.getRegistrations());
-    }
-
-    @Override
-    public Registration findRegistrationById(Long customerId, Long registrationId) {
-        Customer customer = findById(customerId);
-
-        return customer.getRegistrations().stream()
-                .filter(registration -> registration.getId() != null && registration.getId().equals(registrationId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Registration not found with id: " + registrationId));
-    }
-
-    @Override
-    public Registration updateRegistration(Long customerId, Long registrationId, RegistrationRequest request) {
-        Customer customer = findById(customerId);
-
-        AdditionalActivity activity = additionalActivityRepository.findById(request.getActivityId())
-                .orElseThrow(() -> new RuntimeException("Activity not found with id: " + request.getActivityId()));
-
-        Registration registrationToUpdate = customer.getRegistrations().stream()
-                .filter(registration -> registration.getId() != null && registration.getId().equals(registrationId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Registration not found with id: " + registrationId));
-
-        registrationToUpdate.setActivity(activity);
-        registrationToUpdate.setRegistrationDate(request.getRegistrationDate());
-        registrationToUpdate.setNumberOfPeople(request.getNumberOfPeople());
-
-        customerRepository.save(customer);
-        return registrationToUpdate;
-    }
-
-    @Override
-    public void deleteRegistration(Long customerId, Long registrationId) {
-        Customer customer = findById(customerId);
-
-        boolean removed = customer.getRegistrations().removeIf(
-                registration -> registration.getId() != null && registration.getId().equals(registrationId)
+    public Customer registerOrUpdateActivity(Long customerId, RegistrationRequest request) {
+        return customerRepository.registerOrUpdateActivity(
+                customerId,
+                request.getActivityId(),
+                request.getRegistrationDate(),
+                request.getNumberOfPeople()
         );
+    }
 
-        if (!removed) {
-            throw new RuntimeException("Registration not found with id: " + registrationId);
-        }
-
-        customerRepository.save(customer);
+    @Override
+    public void deleteRegistrationForActivity(Long customerId, Long activityId) {
+        customerRepository.deleteRegistrationForActivity(customerId, activityId);
     }
 
     @Override
@@ -197,5 +131,23 @@ public class CustomerService implements ICustomerService {
         }
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public List<Category> findFavoriteCategoriesByCustomerId(Long customerId) {
+        Customer customer = findById(customerId);
+        return new ArrayList<>(customer.getFavoriteCategories());
+    }
+
+    @Override
+    public List<Registration> findRegistrationsByCustomerId(Long customerId) {
+        Customer customer = findById(customerId);
+        return new ArrayList<>(customer.getRegistrations());
+    }
+
+    @Override
+    public List<Arrangement> findBookedArrangementsByCustomerId(Long customerId) {
+        Customer customer = findById(customerId);
+        return new ArrayList<>(customer.getBookedArrangements());
     }
 }

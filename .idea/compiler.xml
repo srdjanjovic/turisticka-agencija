@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Annotation profile for dodatne-aktinvosti" enabled="true">
+      <profile name="Annotation profile for zalbe" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -10,13 +10,13 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar" />
         </processorPath>
         <module name="zalbe" />
-        <module name="dodatne-aktinvosti" />
+        <module name="dodatne-aktivnosti" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="dodatne-aktinvosti" options="-parameters" />
+      <module name="dodatne-aktivnosti" options="-parameters" />
       <module name="zalbe" options="-parameters" />
     </option>
   </component>

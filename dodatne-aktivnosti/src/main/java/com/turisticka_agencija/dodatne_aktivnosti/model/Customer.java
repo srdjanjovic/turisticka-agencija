@@ -1,5 +1,6 @@
 package com.turisticka_agencija.dodatne_aktivnosti.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -22,12 +23,15 @@ public class Customer {
     private String email;
     private String contact;
 
+    @JsonIgnore
     @Relationship(type = "LIKES")
     private Set<Category> favoriteCategories = new HashSet<>();
 
+    @JsonIgnore
     @Relationship(type = "REGISTERED_FOR")
     private Set<Registration> registrations = new HashSet<>();
 
+    @JsonIgnore
     @Relationship(type = "BOOKED")
     private Set<Arrangement> bookedArrangements = new HashSet<>();
 

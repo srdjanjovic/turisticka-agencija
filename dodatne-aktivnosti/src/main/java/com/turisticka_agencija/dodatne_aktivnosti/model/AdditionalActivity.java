@@ -1,5 +1,6 @@
 package com.turisticka_agencija.dodatne_aktivnosti.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -22,6 +23,7 @@ public class AdditionalActivity {
     @Relationship(type = "PART_OF")
     private Arrangement arrangement;
 
+    @JsonIgnore
     @Relationship(type = "BELONGS_TO")
     private Category category;
 

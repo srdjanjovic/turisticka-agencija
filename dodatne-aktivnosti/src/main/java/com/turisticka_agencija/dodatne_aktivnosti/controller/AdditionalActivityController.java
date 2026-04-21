@@ -82,4 +82,36 @@ public class AdditionalActivityController {
                 HttpStatus.OK
         );
     }
+
+    @GetMapping("/recommendations/similar-customers/{customerId}")
+    public ResponseEntity<List<AdditionalActivity>> recommendActivitiesBySimilarCustomers(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                additionalActivityService.recommendActivitiesBySimilarCustomers(customerId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/recommendations/category/{customerId}")
+    public ResponseEntity<List<AdditionalActivity>> recommendActivitiesByCategory(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                additionalActivityService.recommendActivitiesByCategory(customerId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/recommendations/affordable/{customerId}")
+    public ResponseEntity<List<AdditionalActivity>> findAffordableActivitiesForCustomer(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                additionalActivityService.findAffordableActivitiesForCustomer(customerId),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/recommendations/popular/{customerId}")
+    public ResponseEntity<List<AdditionalActivity>> findPopularActivitiesForCustomer(@PathVariable Long customerId) {
+        return new ResponseEntity<>(
+                additionalActivityService.findPopularActivitiesForCustomer(customerId),
+                HttpStatus.OK
+        );
+    }
 }
