@@ -12,6 +12,7 @@ import com.turisticka_agencija.dodatne_aktivnosti.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,13 +52,33 @@ public class CustomerService implements ICustomerService {
     public Customer update(Long id, Customer customer) {
         Customer existingCustomer = findById(id);
 
-        existingCustomer.setFirstName(customer.getFirstName());
-        existingCustomer.setLastName(customer.getLastName());
-        existingCustomer.setAge(customer.getAge());
-        existingCustomer.setEmail(customer.getEmail());
-        existingCustomer.setContact(customer.getContact());
-        existingCustomer.setFavoriteCategories(customer.getFavoriteCategories());
-        existingCustomer.setBookedArrangements(customer.getBookedArrangements());
+        if (customer.getFirstName() != null) {
+            existingCustomer.setFirstName(customer.getFirstName());
+        }
+
+        if (customer.getLastName() != null) {
+            existingCustomer.setLastName(customer.getLastName());
+        }
+
+        if (customer.getAge() != null) {
+            existingCustomer.setAge(customer.getAge());
+        }
+
+        if (customer.getEmail() != null) {
+            existingCustomer.setEmail(customer.getEmail());
+        }
+
+        if (customer.getContact() != null) {
+            existingCustomer.setContact(customer.getContact());
+        }
+
+        if (customer.getFavoriteCategories() != null && !customer.getFavoriteCategories().isEmpty()) {
+            existingCustomer.setFavoriteCategories(customer.getFavoriteCategories());
+        }
+
+        if (customer.getBookedArrangements() != null && !customer.getBookedArrangements().isEmpty()) {
+            existingCustomer.setBookedArrangements(customer.getBookedArrangements());
+        }
 
         return customerRepository.save(existingCustomer);
     }
@@ -72,7 +93,7 @@ public class CustomerService implements ICustomerService {
         return customerRepository.registerOrUpdateActivity(
                 customerId,
                 request.getActivityId(),
-                request.getRegistrationDate(),
+                LocalDate.now(),
                 request.getNumberOfPeople()
         );
     }

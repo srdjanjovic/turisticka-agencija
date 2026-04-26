@@ -38,12 +38,29 @@ public class ArrangementService implements IArrangementService {
     public Arrangement update(Long id, Arrangement arrangement) {
         Arrangement existingArrangement = findById(id);
 
-        existingArrangement.setName(arrangement.getName());
-        existingArrangement.setDestination(arrangement.getDestination());
-        existingArrangement.setStartDate(arrangement.getStartDate());
-        existingArrangement.setEndDate(arrangement.getEndDate());
-        existingArrangement.setPrice(arrangement.getPrice());
-        existingArrangement.setCapacity(arrangement.getCapacity());
+        if (arrangement.getName() != null) {
+            existingArrangement.setName(arrangement.getName());
+        }
+
+        if (arrangement.getDestination() != null) {
+            existingArrangement.setDestination(arrangement.getDestination());
+        }
+
+        if (arrangement.getStartDate() != null) {
+            existingArrangement.setStartDate(arrangement.getStartDate());
+        }
+
+        if (arrangement.getEndDate() != null) {
+            existingArrangement.setEndDate(arrangement.getEndDate());
+        }
+
+        if (arrangement.getPrice() != null) {
+            existingArrangement.setPrice(arrangement.getPrice());
+        }
+
+        if (arrangement.getCapacity() != null) {
+            existingArrangement.setCapacity(arrangement.getCapacity());
+        }
 
         return arrangementRepository.save(existingArrangement);
     }

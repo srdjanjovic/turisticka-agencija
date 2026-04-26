@@ -1,5 +1,6 @@
 package com.turisticka_agencija.dodatne_aktivnosti.controller;
 
+import com.turisticka_agencija.dodatne_aktivnosti.dto.AdditionalActivityDTO;
 import com.turisticka_agencija.dodatne_aktivnosti.model.AdditionalActivity;
 import com.turisticka_agencija.dodatne_aktivnosti.service.IAdditionalActivityService;
 import org.springframework.http.HttpStatus;
@@ -84,7 +85,7 @@ public class AdditionalActivityController {
     }
 
     @GetMapping("/recommendations/similar-customers/{customerId}")
-    public ResponseEntity<List<AdditionalActivity>> recommendActivitiesBySimilarCustomers(@PathVariable Long customerId) {
+    public ResponseEntity<List<AdditionalActivityDTO>> recommendActivitiesBySimilarCustomers(@PathVariable Long customerId) {
         return new ResponseEntity<>(
                 additionalActivityService.recommendActivitiesBySimilarCustomers(customerId),
                 HttpStatus.OK
@@ -92,7 +93,7 @@ public class AdditionalActivityController {
     }
 
     @GetMapping("/recommendations/category/{customerId}")
-    public ResponseEntity<List<AdditionalActivity>> recommendActivitiesByCategory(@PathVariable Long customerId) {
+    public ResponseEntity<List<AdditionalActivityDTO>> recommendActivitiesByCategory(@PathVariable Long customerId) {
         return new ResponseEntity<>(
                 additionalActivityService.recommendActivitiesByCategory(customerId),
                 HttpStatus.OK
@@ -100,7 +101,7 @@ public class AdditionalActivityController {
     }
 
     @GetMapping("/recommendations/affordable/{customerId}")
-    public ResponseEntity<List<AdditionalActivity>> findAffordableActivitiesForCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<List<AdditionalActivityDTO>> findAffordableActivitiesForCustomer(@PathVariable Long customerId) {
         return new ResponseEntity<>(
                 additionalActivityService.findAffordableActivitiesForCustomer(customerId),
                 HttpStatus.OK
@@ -108,7 +109,7 @@ public class AdditionalActivityController {
     }
 
     @GetMapping("/recommendations/popular/{customerId}")
-    public ResponseEntity<List<AdditionalActivity>> findPopularActivitiesForCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<List<AdditionalActivityDTO>> findPopularActivitiesForCustomer(@PathVariable Long customerId) {
         return new ResponseEntity<>(
                 additionalActivityService.findPopularActivitiesForCustomer(customerId),
                 HttpStatus.OK

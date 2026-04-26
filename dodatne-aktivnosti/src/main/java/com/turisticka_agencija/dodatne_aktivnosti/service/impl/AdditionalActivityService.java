@@ -1,5 +1,7 @@
 package com.turisticka_agencija.dodatne_aktivnosti.service.impl;
 
+import com.turisticka_agencija.dodatne_aktivnosti.dto.AdditionalActivityDTO;
+import com.turisticka_agencija.dodatne_aktivnosti.dto.ArrangementDTO;
 import com.turisticka_agencija.dodatne_aktivnosti.model.AdditionalActivity;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Arrangement;
 import com.turisticka_agencija.dodatne_aktivnosti.model.Category;
@@ -48,14 +50,41 @@ public class AdditionalActivityService implements IAdditionalActivityService {
     public AdditionalActivity update(Long id, AdditionalActivity activity) {
         AdditionalActivity existingActivity = findById(id);
 
-        existingActivity.setName(activity.getName());
-        existingActivity.setDescription(activity.getDescription());
-        existingActivity.setPrice(activity.getPrice());
-        existingActivity.setLocation(activity.getLocation());
-        existingActivity.setDuration(activity.getDuration());
-        existingActivity.setMaxCapacity(activity.getMaxCapacity());
-        existingActivity.setArrangement(activity.getArrangement());
-        existingActivity.setCategory(activity.getCategory());
+        if (activity.getName() != null) {
+            existingActivity.setName(activity.getName());
+        }
+
+        if (activity.getDescription() != null) {
+            existingActivity.setDescription(activity.getDescription());
+        }
+
+        if (activity.getPrice() != null) {
+            existingActivity.setPrice(activity.getPrice());
+        }
+
+        if (activity.getLocation() != null) {
+            existingActivity.setLocation(activity.getLocation());
+        }
+
+        if (activity.getStartDate() != null) {
+            existingActivity.setStartDate(activity.getStartDate());
+        }
+
+        if (activity.getEndDate() != null) {
+            existingActivity.setEndDate(activity.getEndDate());
+        }
+
+        if (activity.getMaxCapacity() != null) {
+            existingActivity.setMaxCapacity(activity.getMaxCapacity());
+        }
+
+        if (activity.getArrangement() != null) {
+            existingActivity.setArrangement(activity.getArrangement());
+        }
+
+        if (activity.getCategory() != null) {
+            existingActivity.setCategory(activity.getCategory());
+        }
 
         return additionalActivityRepository.save(existingActivity);
     }
@@ -100,22 +129,57 @@ public class AdditionalActivityService implements IAdditionalActivityService {
     }
 
     @Override
-    public List<AdditionalActivity> recommendActivitiesBySimilarCustomers(Long customerId) {
-        return additionalActivityRepository.recommendActivitiesBySimilarCustomers(customerId);
+    public List<AdditionalActivityDTO> recommendActivitiesBySimilarCustomers(Long customerId) {
+        return additionalActivityRepository.recommendActivitiesBySimilarCustomers(customerId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
     @Override
-    public List<AdditionalActivity> recommendActivitiesByCategory(Long customerId) {
-        return additionalActivityRepository.recommendActivitiesByCategory(customerId);
+    public List<AdditionalActivityDTO> recommendActivitiesByCategory(Long customerId) {
+        return additionalActivityRepository.recommendActivitiesByCategory(customerId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
     @Override
-    public List<AdditionalActivity> findAffordableActivitiesForCustomer(Long customerId) {
-        return additionalActivityRepository.findAffordableActivitiesForCustomer(customerId);
+    public List<AdditionalActivityDTO> findAffordableActivitiesForCustomer(Long customerId) {
+        return additionalActivityRepository.findAffordableActivitiesForCustomer(customerId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
     @Override
-    public List<AdditionalActivity> findPopularActivitiesForCustomer(Long customerId) {
-        return additionalActivityRepository.findPopularActivitiesForCustomer(customerId);
+    public List<AdditionalActivityDTO> findPopularActivitiesForCustomer(Long customerId) {
+        return additionalActivityRepository.findPopularActivitiesForCustomer(customerId)
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+    private AdditionalActivityDTO mapToDTO(AdditionalActivity activity) {
+        ArrangementDTO arrangementDTO = null;
+
+        if (activity.getArrangement() != null) {
+            arrangementDTO = new ArrangementDTO(
+                    activity.getArrangement().getArrangementId(),
+                    activity.getArrangement().getName()
+            );
+        }
+
+        return new AdditionalActivityDTO(
+                activity.getActivityId(),
+                activity.getName(),
+                activity.getDescription(),
+                activity.getPrice(),
+                activity.getLocation(),
+                activity.getStartDate(),
+                activity.getEndDate(),
+                activity.getMaxCapacity(),
+                arrangementDTO
+        );
     }
 }

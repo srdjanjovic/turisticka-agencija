@@ -1,5 +1,6 @@
 package com.turisticka_agencija.dodatne_aktivnosti.service;
 
+import com.turisticka_agencija.dodatne_aktivnosti.dto.AdditionalActivityDTO;
 import com.turisticka_agencija.dodatne_aktivnosti.model.AdditionalActivity;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public interface IAdditionalActivityService {
     AdditionalActivity addArrangementToActivity(Long activityId, Long arrangementId);
     AdditionalActivity removeArrangementFromActivity(Long activityId);
 
-    List<AdditionalActivity> recommendActivitiesBySimilarCustomers(Long customerId);
-    List<AdditionalActivity> recommendActivitiesByCategory(Long customerId);
-    List<AdditionalActivity> findAffordableActivitiesForCustomer(Long customerId);
-    List<AdditionalActivity> findPopularActivitiesForCustomer(Long customerId);
+    List<AdditionalActivityDTO> recommendActivitiesBySimilarCustomers(Long customerId);
+    List<AdditionalActivityDTO> recommendActivitiesByCategory(Long customerId);
+    List<AdditionalActivityDTO> findAffordableActivitiesForCustomer(Long customerId);
+    List<AdditionalActivityDTO> findPopularActivitiesForCustomer(Long customerId);
 }

@@ -13,7 +13,6 @@ import java.util.Set;
 public class Customer {
 
     @Id
-    @GeneratedValue
     private Long customerId;
 
     private String firstName;

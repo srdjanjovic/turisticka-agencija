@@ -39,7 +39,9 @@ public class CategoryService implements ICategoryService {
             return null;
         }
 
-        existingCategory.setName(updatedCategory.getName());
+        if (updatedCategory.getName() != null) {
+            existingCategory.setName(updatedCategory.getName());
+        }
 
         return categoryRepository.save(existingCategory);
     }

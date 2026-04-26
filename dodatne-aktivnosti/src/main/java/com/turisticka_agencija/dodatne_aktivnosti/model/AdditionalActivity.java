@@ -1,23 +1,24 @@
 package com.turisticka_agencija.dodatne_aktivnosti.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+
+import java.time.LocalDate;
 
 @Node("AdditionalActivity")
 public class AdditionalActivity {
 
     @Id
-    @GeneratedValue
     private Long activityId;
 
     private String name;
     private String description;
     private Double price;
     private String location;
-    private Integer duration;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer maxCapacity;
 
     @Relationship(type = "PART_OF")
@@ -67,12 +68,20 @@ public class AdditionalActivity {
         this.location = location;
     }
 
-    public Integer getDuration() {
-        return duration;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public Integer getMaxCapacity() {

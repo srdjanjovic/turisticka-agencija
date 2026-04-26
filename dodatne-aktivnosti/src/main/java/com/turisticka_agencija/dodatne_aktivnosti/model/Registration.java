@@ -1,6 +1,8 @@
 package com.turisticka_agencija.dodatne_aktivnosti.model;
 
-import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.neo4j.core.schema.RelationshipId;
+import org.springframework.data.neo4j.core.schema.RelationshipProperties;
+import org.springframework.data.neo4j.core.schema.TargetNode;
 
 import java.time.LocalDate;
 
@@ -9,6 +11,8 @@ public class Registration {
 
     @RelationshipId
     private Long id;
+
+    private Long registrationId;
 
     @TargetNode
     private AdditionalActivity activity;
@@ -19,7 +23,8 @@ public class Registration {
     public Registration() {
     }
 
-    public Registration(AdditionalActivity activity, LocalDate registrationDate, Integer numberOfPeople) {
+    public Registration(Long registrationId, AdditionalActivity activity, LocalDate registrationDate, Integer numberOfPeople) {
+        this.registrationId = registrationId;
         this.activity = activity;
         this.registrationDate = registrationDate;
         this.numberOfPeople = numberOfPeople;
@@ -27,6 +32,14 @@ public class Registration {
 
     public Long getId() {
         return id;
+    }
+
+    public Long getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(Long registrationId) {
+        this.registrationId = registrationId;
     }
 
     public AdditionalActivity getActivity() {

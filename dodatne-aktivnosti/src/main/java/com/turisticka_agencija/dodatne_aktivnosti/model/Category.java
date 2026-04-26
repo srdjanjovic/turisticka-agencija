@@ -9,7 +9,6 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 public class Category {
 
     @Id
-    @GeneratedValue
     private Long categoryId;
 
     private String name;

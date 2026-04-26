@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends Neo4jRepository<Customer, Long> {
 
     @Query("""
-        MATCH (c:Customer) WHERE id(c) = $customerId
-        MATCH (a:AdditionalActivity) WHERE id(a) = $activityId
+        MATCH (c:Customer)
+        WHERE c.customerId = $customerId
+        MATCH (a:AdditionalActivity)
+        WHERE a.activityId = $activityId
         MERGE (c)-[r:REGISTERED_FOR]->(a)
         ON CREATE SET r.registrationDate = $registrationDate,
                       r.numberOfPeople = $numberOfPeople
@@ -25,9 +27,9 @@ public interface CustomerRepository extends Neo4jRepository<Customer, Long> {
                                       @Param("numberOfPeople") Integer numberOfPeople);
 
     @Query("""
-        MATCH (c:Customer) WHERE id(c) = $customerId
-        MATCH (c)-[r:REGISTERED_FOR]->(a:AdditionalActivity)
-        WHERE id(a) = $activityId
+        MATCH (c:Customer)-[r:REGISTERED_FOR]->(a:AdditionalActivity)
+        WHERE c.customerId = $customerId
+        AND a.activityId = $activityId
         DELETE r
     """)
     void deleteRegistrationForActivity(@Param("customerId") Long customerId,

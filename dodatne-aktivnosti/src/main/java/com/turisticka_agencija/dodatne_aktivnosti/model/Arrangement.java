@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class Arrangement {
 
     @Id
-    @GeneratedValue
     private Long arrangementId;
 
     private String name;
